@@ -87,7 +87,6 @@ public class VolumeControl extends CordovaPlugin {
 				int volume = getCurrentVolume();
 				float _volumeToSet = (float)args.getDouble(0);
 				int volumeToSet = Math.round(_volumeToSet * 100.0f);
-				LOG.d(TAG, "Volume to set");
 				if(volume > 1){
 					// Mute: Set volume to 0
 					volume = 0;
@@ -95,11 +94,8 @@ public class VolumeControl extends CordovaPlugin {
 					// Unmute: Set volume to previous value
 					volume = getVolumeToSet(volumeToSet);
 				}
-				LOG.d(TAG, "Volume value");
 				cordova.getThreadPool().execute(new SetVolume((volume)));
-				LOG.d(TAG, "EXecuted");
-				callbackContext.success(String.valueOf(volume));
-				LOG.d(TAG, "Success");
+				callbackContext.success(volume);
 
 			} catch (Exception e) {
 				LOG.d(TAG, "Error setting mute/unmute " +  e.getStackTrace().toString() + e);

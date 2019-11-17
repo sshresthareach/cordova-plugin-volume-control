@@ -14,37 +14,60 @@ var exec = require('cordova/exec');
 
 function VolumeControl(){
   this.currentVolume = null;
-  initializeVolume.call(this);
+  setCurrentVolume.call(this);
 }
 
-function initializeVolume(){
-  exec(
-    function(value){
-      this.currentVolume = value;
-    }.bind(this), 
-    function(error){
-      console.error("VolumeControl: Failed to initialize volume.", error);
-    }, 
-    'VolumeControl', 'getVolume', []);
+function setCurrentVolume(value){
+  if(value){
+    this.currentVolume = value;
+  } else {
+    getVolume(
+      function(value){
+        this.currentVolume = value;
+      }.bind(this), 
+      function(error){
+        console.error("VolumeControl: Failed to initialize volume.", error);
+      }, 
+      'VolumeControl', 'getVolume', []);
+  }
 }
 
-VolumeControl.prototype.isMuted = function(success, error) {
-  exec(success, error, 'VolumeControl', 'isMuted', []);
-};
-
-VolumeControl.prototype.getVolume = function(success, error) {
+function getVolume(success, error) {
   exec(success, error, 'VolumeControl', 'getVolume', []);
 };
+
+VolumeControl.prototype.isMuted = function(success, error) {
+  exec(function(value){
+    if(value === 0){
+      success(true);
+    } else {
+      success(false);
+    }
+  }, error, 'VolumeControl', 'isMuted', []);
+};
+
+VolumeControl.prototype.getVolume = getVolume;
 
 VolumeControl.prototype.setVolume = function(volume, success, error) {
   if (volume > 1) {
     volume /= 100;
   }
-  exec(success, error, 'VolumeControl', 'setVolume', [volume * 1]);
+  exec(function(){
+    setCurrentVolume(volume);
+    success(volume);
+  }, error, 'VolumeControl', 'setVolume', [volume * 1]);
 };
 
 VolumeControl.prototype.toggleMute = function( success, error) {
-  exec(success, error, 'VolumeControl', 'toggleMute', [this.currentVolume]);
+  exec(function(value){
+    if(value === 0){
+      console.info('VolumeControl: Muted.');
+      success(true);
+    } else {
+      console.info('VolumeControl: Unmuted.');
+      success(false);
+    }
+  }, error, 'VolumeControl', 'toggleMute', [this.currentVolume]);
 };
 
 module.exports = new VolumeControl();
