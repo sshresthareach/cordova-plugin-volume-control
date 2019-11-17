@@ -53,9 +53,9 @@ VolumeControl.prototype.setVolume = function(volume, success, error) {
     volume /= 100;
   }
   exec(function(){
-    setCurrentVolume(volume);
+    setCurrentVolume.call(this, volume);
     success(volume);
-  }, error, 'VolumeControl', 'setVolume', [volume * 1]);
+  }.bind(this), error, 'VolumeControl', 'setVolume', [volume * 1]);
 };
 
 VolumeControl.prototype.toggleMute = function( success, error) {
