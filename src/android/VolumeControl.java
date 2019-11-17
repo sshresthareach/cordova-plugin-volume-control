@@ -36,6 +36,20 @@ public class VolumeControl extends CordovaPlugin {
 		boolean actionState = true;
 		context = cordova.getActivity().getApplicationContext();
 		manager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+
+		class SetVolume implements Runnable {
+			int volume;
+
+			SetVolume(int paramVolume) {
+				volume = paramVolume;
+			}
+
+			public void run() {
+				AudioManager manager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+				manager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, AudioManager.FLAG_PLAY_SOUND);
+			}
+		}
+
 		if (SET.equals(action)) {
 			try {
 				//Get the volume value to set
@@ -72,8 +86,8 @@ public class VolumeControl extends CordovaPlugin {
 				//Mute or Unmute volume
 				int volume = getCurrentVolume();
 				float _volumeToSet = (float)args.getDouble(0);
-				int volumeToSet = (int)Math.round(_volumeToSet * 100.0f);
-
+				int volumeToSet = Math.round(_volumeToSet * 100.0f);
+				LOG.d(TAG, "Volume to set");
 				if(volume > 1){
 					// Mute: Set volume to 0
 					volume = 0;
@@ -81,11 +95,14 @@ public class VolumeControl extends CordovaPlugin {
 					// Unmute: Set volume to previous value
 					volume = getVolumeToSet(volumeToSet);
 				}
-				manager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, AudioManager.FLAG_PLAY_SOUND);
-				callbackContext.success(volume);
+				LOG.d(TAG, "Volume value");
+				cordova.getThreadPool().execute(new SetVolume((volume)));
+				LOG.d(TAG, "EXecuted");
+				callbackContext.success(String.valueOf(volume));
+				LOG.d(TAG, "Success");
 
 			} catch (Exception e) {
-				LOG.d(TAG, "Error setting mute/unmute " + e);
+				LOG.d(TAG, "Error setting mute/unmute " +  e.getStackTrace().toString() + e);
 				actionState = false;
 			}
 		} else if(ISM.equals(action)){
