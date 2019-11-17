@@ -21,7 +21,7 @@ function setCurrentVolume(value){
   if(value){
     this.currentVolume = value;
   } else {
-    getVolume(
+    getRealVolume(
       function(value){
         this.currentVolume = value;
       }.bind(this), 
@@ -32,7 +32,7 @@ function setCurrentVolume(value){
   }
 }
 
-function getVolume(success, error) {
+function getRealVolume(success, error) {
   exec(success, error, 'VolumeControl', 'getVolume', []);
 };
 
@@ -46,9 +46,15 @@ VolumeControl.prototype.isMuted = function(success, error) {
   }, error, 'VolumeControl', 'isMuted', []);
 };
 
-VolumeControl.prototype.getVolume = getVolume;
+VolumeControl.prototype.getVolume = function getVolume(success, failure){
+  getRealVolume(function(value){
+    var volume = Math.round(value * 10);
+    success(volume)
+  }, failure);
+};
 
 VolumeControl.prototype.setVolume = function(volume, success, error) {
+  volume = volume / 10;
   if (volume > 1) {
     volume /= 100;
   }
