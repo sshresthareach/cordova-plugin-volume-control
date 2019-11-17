@@ -60,7 +60,7 @@ VolumeControl.prototype.setVolume = function(volume, success, error) {
   }
   exec(function(){
     setCurrentVolume.call(this, volume);
-    success(volume);
+    success(volume * 10);
   }.bind(this), error, 'VolumeControl', 'setVolume', [volume * 1]);
 };
 
