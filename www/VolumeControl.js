@@ -33,10 +33,16 @@ function setCurrentVolume(value){
 }
 
 function getRealVolume(success, error) {
+  if(!isFunction(success)){
+    throw new Error('VolumeControl: Success callback is required');
+  }
   exec(success, error, 'VolumeControl', 'getVolume', []);
 };
 
 VolumeControl.prototype.isMuted = function(success, error) {
+  if(!isFunction(success)){
+    throw new Error('VolumeControl: Success callback is required');
+  }
   exec(function(value){
     if(value === 0){
       success(true);
@@ -47,6 +53,9 @@ VolumeControl.prototype.isMuted = function(success, error) {
 };
 
 VolumeControl.prototype.getVolume = function getVolume(success, failure){
+  if(!isFunction(success)){
+    throw new Error('VolumeControl: Success callback is required');
+  }
   getRealVolume(function(value){
     var volume = Math.round(value * 10);
     success(volume)
@@ -54,6 +63,9 @@ VolumeControl.prototype.getVolume = function getVolume(success, failure){
 };
 
 VolumeControl.prototype.setVolume = function(volume, success, error) {
+  if(!isFunction(success)){
+    throw new Error('VolumeControl: Success callback is required');
+  }
   volume = volume / 10;
   if (volume > 1) {
     volume /= 100;
@@ -65,6 +77,9 @@ VolumeControl.prototype.setVolume = function(volume, success, error) {
 };
 
 VolumeControl.prototype.toggleMute = function( success, error) {
+  if(!isFunction(success)){
+    throw new Error('VolumeControl: Success callback is required');
+  }
   exec(function(value){
     if(value === 0){
       console.info('VolumeControl: Muted.');
@@ -87,3 +102,11 @@ exports.hideVolume = function(success, error) {
   exec(success, error, 'VolumeControl', 'hideVolume', []);
 };
 */
+function isFunction(value) {
+    return (
+        value &&
+        (Object.prototype.toString.call(value) === '[object Function]' ||
+            'function' === typeof value ||
+            value instanceof Function)
+    );
+}
