@@ -62,17 +62,18 @@ VolumeControl.prototype.getVolume = function getVolume(success, failure){
   }, failure);
 };
 
-VolumeControl.prototype.setVolume = function(volume, success, error) {
+VolumeControl.prototype.setVolume = function(paramVolume, success, error) {
   if(!isFunction(success)){
     throw new Error('VolumeControl: Success callback is required');
   }
+  var volume = paramVolume;
   volume = volume / 10;
   if (volume > 1) {
     volume /= 100;
   }
   exec(function(){
     setCurrentVolume.call(this, volume);
-    success(volume * 10);
+    success(paramVolume);
   }.bind(this), error, 'VolumeControl', 'setVolume', [volume * 1]);
 };
 
