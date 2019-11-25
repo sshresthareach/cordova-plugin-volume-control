@@ -58,7 +58,7 @@ VolumeControl.prototype.getVolume = function getVolume(success, failure){
   }
   getRealVolume(function(value){
     var volume = Math.round(value * 10);
-    success(volume)
+    success(volume);
   }, failure);
 };
 
@@ -89,7 +89,7 @@ VolumeControl.prototype.toggleMute = function( success, error) {
       console.info('VolumeControl: Unmuted.');
       success(false);
     }
-  }, error, 'VolumeControl', 'toggleMute', [this.currentVolume]);
+  }, error, 'VolumeControl', 'toggleMute', [parseFloat(this.currentVolume) || 1.0]);
 };
 
 module.exports = new VolumeControl();
