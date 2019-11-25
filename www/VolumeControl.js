@@ -89,7 +89,7 @@ VolumeControl.prototype.toggleMute = function( success, error) {
       console.info('VolumeControl: Unmuted.');
       success(false);
     }
-  }, error, 'VolumeControl', 'toggleMute', [parseFloat(this.currentVolume) || 1.0]);
+  }, error, 'VolumeControl', 'toggleMute', [parseFloat(this.currentVolume) || 0.1]);
 };
 
 module.exports = new VolumeControl();
