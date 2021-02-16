@@ -1,17 +1,6 @@
 "use strict";
 
 var exec = require('cordova/exec');
-
-// function defaults(object, source) {
-//   if(!object) object = {};
-//   for(var prop in source) {
-//     if(typeof object[prop] === 'undefined') {
-//       object[prop] = source[prop];
-//     }
-//   }
-//   return object;
-// }
-
 function VolumeControl(){
   this.currentVolume = null;
   setCurrentVolume.call(this);
@@ -94,15 +83,6 @@ VolumeControl.prototype.toggleMute = function( success, error) {
 
 module.exports = new VolumeControl();
 
-/*
-exports.getCategory = function(success, error) {
-  exec(success, error, 'VolumeControl', 'getCategory', []);
-};
-
-exports.hideVolume = function(success, error) {
-  exec(success, error, 'VolumeControl', 'hideVolume', []);
-};
-*/
 function isFunction(value) {
     return (
         value &&
