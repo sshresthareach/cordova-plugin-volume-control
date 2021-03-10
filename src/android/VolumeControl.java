@@ -10,6 +10,9 @@
 
 package com.lorentech.cordova.plugins.volumeControl;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import android.util.Log;
@@ -67,7 +70,7 @@ public class VolumeControl extends CordovaPlugin {
 				manager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, (play_sound ? AudioManager.FLAG_PLAY_SOUND : 0));
 				callbackContext.success();
 			} catch (Exception e) {
-				Log.d(TAG, "Error setting volume " + e + e.getStackTrace().toString());
+				Log.d(TAG, "Error setting volume " + this.getErrorMessage(e));
 				actionState = false;
 			}
 		} else if(GET.equals(action)) {
@@ -78,7 +81,7 @@ public class VolumeControl extends CordovaPlugin {
 				String strVol= String.valueOf(currVol);
 				callbackContext.success(strVol);
 			} catch (Exception e) {
-				Log.d(TAG, "Error setting volume " + e);
+				Log.d(TAG, "Error setting volume " + this.getErrorMessage(e));
 				actionState = false;
 			}
 		} else if(MUT.equals(action)){
@@ -98,7 +101,7 @@ public class VolumeControl extends CordovaPlugin {
 				callbackContext.success(volume);
 
 			} catch (Exception e) {
-				Log.d(TAG, "Error setting mute/unmute " + e +  e.getStackTrace().toString());
+				Log.d(TAG, "Error setting mute/unmute " + this.getErrorMessage(e));
 				actionState = false;
 			}
 		} else if(ISM.equals(action)){
@@ -107,7 +110,7 @@ public class VolumeControl extends CordovaPlugin {
 				int volume = getCurrentVolume();
 				callbackContext.success(volume == 0 ? 0 : 1);
 			} catch (Exception e) {
-				Log.d(TAG, "Error checking mute volume " + e +  e.getStackTrace().toString());
+				Log.d(TAG, "Error checking mute volume " + this.getErrorMessage(e));
 				actionState = false;
 			}
 		} else {
@@ -124,7 +127,7 @@ public class VolumeControl extends CordovaPlugin {
 
 			return volLevel;
 		} catch (Exception e){
-			Log.d(TAG, "Error getting VolumeToSet: " + e +  e.getStackTrace().toString());
+			Log.d(TAG, "Error getting VolumeToSet: " + this.getErrorMessage(e));
 			return 1;
 		}
 	}
@@ -138,8 +141,15 @@ public class VolumeControl extends CordovaPlugin {
 
 			return volLevel;
 		} catch (Exception e) {
-			Log.d(TAG, "Error getting CurrentVolume: " + e + e.getStackTrace().toString());
+			Log.d(TAG, "Error getting CurrentVolume: " + this.getErrorMessage(e));
 			return 1;
 		}
+	}
+
+	private string getErrorMessage(Exception e) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		e.printStackTrace(pw);
+		return sw.toString();
 	}
 }
