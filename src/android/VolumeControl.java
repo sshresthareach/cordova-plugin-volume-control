@@ -146,7 +146,7 @@ public class VolumeControl extends CordovaPlugin {
 		}
 	}
 
-	private string getErrorMessage(Exception e) {
+	private String getErrorMessage(Exception e) {
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		e.printStackTrace(pw);
