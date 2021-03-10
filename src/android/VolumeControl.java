@@ -29,7 +29,7 @@ public class VolumeControl extends CordovaPlugin {
 	public static final String MUT = "toggleMute";
 	public static final String ISM = "isMuted";
 
-	private static final String TAG = "REACHLog: VolumeControl: ";
+	private static final String TAG = "REACHLog";
 
 	private Context context;
 	private AudioManager manager;
