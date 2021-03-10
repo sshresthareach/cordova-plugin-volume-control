@@ -26,7 +26,7 @@ public class VolumeControl extends CordovaPlugin {
 	public static final String MUT = "toggleMute";
 	public static final String ISM = "isMuted";
 
-	private static final String TAG = "VolumeControl";
+	private static final String TAG = "REACHLog: VolumeControl: ";
 
 	private Context context;
 	private AudioManager manager;
@@ -67,7 +67,7 @@ public class VolumeControl extends CordovaPlugin {
 				manager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, (play_sound ? AudioManager.FLAG_PLAY_SOUND : 0));
 				callbackContext.success();
 			} catch (Exception e) {
-				LOG.d(TAG, "Error setting volume " + e);
+				LOG.d(TAG, "Error setting volume " + e + e.getStackTrace().toString());
 				actionState = false;
 			}
 		} else if(GET.equals(action)) {
@@ -98,7 +98,7 @@ public class VolumeControl extends CordovaPlugin {
 				callbackContext.success(volume);
 
 			} catch (Exception e) {
-				LOG.d(TAG, "Error setting mute/unmute " +  e.getStackTrace().toString() + e);
+				LOG.d(TAG, "Error setting mute/unmute " + e +  e.getStackTrace().toString());
 				actionState = false;
 			}
 		} else if(ISM.equals(action)){
@@ -107,7 +107,7 @@ public class VolumeControl extends CordovaPlugin {
 				int volume = getCurrentVolume();
 				callbackContext.success(volume == 0 ? 0 : 1);
 			} catch (Exception e) {
-				LOG.d(TAG, "Error checking mute volume " + e);
+				LOG.d(TAG, "Error checking mute volume " + e +  e.getStackTrace().toString());
 				actionState = false;
 			}
 		} else {
@@ -124,7 +124,7 @@ public class VolumeControl extends CordovaPlugin {
 
 			return volLevel;
 		} catch (Exception e){
-			LOG.d(TAG, "Error getting VolumeToSet: " + e);
+			LOG.d(TAG, "Error getting VolumeToSet: " + e +  e.getStackTrace().toString());
 			return 1;
 		}
 	}
@@ -138,7 +138,7 @@ public class VolumeControl extends CordovaPlugin {
 
 			return volLevel;
 		} catch (Exception e) {
-			LOG.d(TAG, "Error getting CurrentVolume: " + e);
+			LOG.d(TAG, "Error getting CurrentVolume: " + e + e.getStackTrace().toString());
 			return 1;
 		}
 	}
